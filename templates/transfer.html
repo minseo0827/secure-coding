@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>송금</title>
+</head>
+<body>
+    <h1>송금하기</h1>
+    <form method="post">
+        <label for="receiver">수신자 사용자명:</label>
+        <input type="text" name="receiver" required><br>
+
+        <label for="amount">송금 금액:</label>
+        <input type="number" name="amount" min="1" required><br>
+
+        <button type="submit">송금하기</button>
+    </form>
+    <a href="{{ url_for('dashboard') }}">← 대시보드로 돌아가기</a>
+</body>
+</html>

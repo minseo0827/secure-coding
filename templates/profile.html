@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}프로필{% endblock %}
+{% block content %}
+<h2>{{ user.username }}의 프로필</h2>
+<p>사용자명: {{ user.username }}</p>
+<p>소개글: {{ user.bio if user.bio else '소개글이 없습니다.' }}</p>
+<p>소지금: {{ user.balance }}원 
+    {% if is_owner %}
+        <a href="{{ url_for('charge') }}">충전하기</a>
+    {% endif %}
+</p>
+
+{% if is_owner %}
+    <h3>프로필 수정</h3>
+    <form method="POST">
+        <label for="bio">소개글 수정:</label><br>
+        <textarea id="bio" name="bio" rows="4" cols="50">{{ user.bio or '' }}</textarea><br>
+        
+        <h4>비밀번호 변경</h4>
+        <label for="current_password">현재 비밀번호:</label><br>
+        <input type="password" id="current_password" name="current_password"><br>
+        <label for="new_password">새 비밀번호:</label><br>
+        <input type="password" id="new_password" name="new_password"><br>
+        
+        <button type="submit">업데이트</button>
+    </form>
+{% endif %}
+
+<h3>등록한 상품</h3>
+{% if products %}
+    <ul>
+    {% for product in products %}
+        <li>
+            <a href="{{ url_for('view_product', product_id=product.id) }}">{{ product.title }}</a> - {{ product.price }}
+        </li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>등록한 상품이 없습니다.</p>
+{% endif %}
+
+<a href="{{ url_for('dashboard') }}">대시보드로 돌아가기</a>
+{% endblock %}

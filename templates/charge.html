@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}소지금 충전{% endblock %}
+{% block content %}
+<h2>소지금 충전</h2>
+<p>현재 소지금: {{ user.balance }}원</p>
+
+<form method="POST">
+    <label for="amount">충전 금액 (원):</label><br>
+    <input type="number" id="amount" name="amount" min="1" required><br>
+    <button type="submit">충전하기</button>
+</form>
+
+<a href="{{ url_for('profile', user_id=user.id) }}">프로필로 돌아가기</a>
+{% endblock %}

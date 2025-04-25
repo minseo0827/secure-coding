@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block title %}관리자 페이지{% endblock %}
+{% block content %}
+<h2>관리자 페이지</h2>
+
+<h3>모든 사용자</h3>
+{% if users %}
+    <ul>
+    {% for user in users %}
+        <li>
+            <a href="{{ url_for('profile', user_id=user.id) }}">{{ user.username }}</a> - 역할: {{ user.role }} 
+            (차단 상태: {{ '차단됨' if user.is_blocked else '정상' }})
+            {% if user.role != 'admin' %}
+                {% if user.is_blocked %}
+                    <form action="{{ url_for('unblock_user', user_id=user.id) }}" method="POST" style="display:inline;">
+                        <button type="submit">차단 해제</button>
+                    </form>
+                {% else %}
+                    <form action="{{ url_for('block_user', user_id=user.id) }}" method="POST" style="display:inline;">
+                        <button type="submit" onclick="return confirm('정말 차단하시겠습니까?');">차단</button>
+                    </form>
+                {% endif %}
+            {% endif %}
+        </li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>등록된 사용자가 없습니다.</p>
+{% endif %}
+
+<h3>모든 신고</h3>
+{% if reports %}
+    <ul>
+    {% for report in reports %}
+        <li>
+            신고자: {{ report.reporter_username }} | 대상: {{ report.target_id }} | 이유: {{ report.reason }}
+        </li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>신고가 없습니다.</p>
+{% endif %}
+
+<h3>모든 상품</h3>
+{% if products %}
+    <ul>
+    {% for product in products %}
+        <li>
+            <a href="{{ url_for('view_product', product_id=product.id) }}">{{ product.title }}</a> - {{ product.price }} 
+            (판매자: {{ product.seller_username }})
+            <form action="{{ url_for('admin_delete_product', product_id=product.id) }}" method="POST" style="display:inline;">
+                <button type="submit" onclick="return confirm('정말 삭제하시겠습니까?');">삭제</button>
+            </form>
+        </li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>등록된 상품이 없습니다.</p>
+{% endif %}
+
+<a href="{{ url_for('dashboard') }}">대시보드로 돌아가기</a>
+{% endblock %}
